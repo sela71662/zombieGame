@@ -1,0 +1,60 @@
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]serSettings/
+
+# MemoryCaptures can get excessive
+/[Mm]emoryCaptures/
+
+# Asset reimport data
+/[Aa]ssets/[Rr]eimport.metadata
+
+# Metadata of folders that are not versioned
+/[Aa]ssets/_Recovery
+
+# VS/Mono-specific
+.vs/
+.vsconfig
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D generated file on crash reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.unitypackage
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# Packed assets
+/[Aa]ssets/[Aa]ddressableAssetsData/*/*.bin*
+
+# Temporary files created by Unity Editor and OS
+.DS_Store*
+Thumbs.db
+Icon?
+desktop.ini

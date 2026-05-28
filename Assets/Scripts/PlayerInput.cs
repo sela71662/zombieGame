@@ -8,6 +8,7 @@ public class PlayerInput : MonoBehaviour {
     public string fireButtonName = "Fire1"; // 발사를 위한 입력 버튼 이름
     public string reloadButtonName = "Reload"; // 재장전을 위한 입력 버튼 이름
     public string grenadeButtonName = "Grenade"; // 수류탄 투척을 위한 입력 버튼 이름
+    public string lureButtonName = "Lure"; // 축음기 설치를 위한 입력 버튼 이름
 
     // 값 할당은 내부에서만 가능
     public float move { get; private set; } // 감지된 움직임 입력값
@@ -15,6 +16,7 @@ public class PlayerInput : MonoBehaviour {
     public bool fire { get; private set; } // 감지된 발사 입력값
     public bool reload { get; private set; } // 감지된 재장전 입력값
     public bool grenade { get; private set; } // 감지된 수류탄 투척 입력값
+    public bool lure { get; private set; } // 감지된 축음기 설치 입력값
 
     // 매프레임 사용자 입력을 감지
     private void Update() {
@@ -26,6 +28,7 @@ public class PlayerInput : MonoBehaviour {
             fire = false;
             reload = false;
             grenade = false;
+            lure = false;
             return;
         }
 
@@ -39,5 +42,7 @@ public class PlayerInput : MonoBehaviour {
         reload = Input.GetButtonDown(reloadButtonName);
         // grenade에 관한 입력 감지 (G 키)
         grenade = Input.GetKeyDown(KeyCode.G);
+        // lure에 관한 입력 감지 (F 키)
+        lure = Input.GetKeyDown(KeyCode.F);
     }
 }

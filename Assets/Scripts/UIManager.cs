@@ -25,10 +25,16 @@ public class UIManager : MonoBehaviour {
     public Text waveText; // 적 웨이브 표시용 텍스트
     public GameObject gameoverUI; // 게임 오버시 활성화할 UI 
     public Text grenadeText;
+    public Text gramophoneText;
 
     public void UpdateGrenadeCount(int count)
     {
         grenadeText.text = count.ToString();
+    }
+
+    public void UpdateGramophoneCount(int count)
+    {
+        gramophoneText.text = count.ToString();
     }
 
     // 탄약 텍스트 갱신

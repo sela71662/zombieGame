@@ -860,8 +860,9 @@ MonoBehaviour:
   damage: 100
   explosionRadius: 5
   fuseTime: 2
-  explosionEffect: {fileID: 1000012909287652, guid: da33d2f1d5c4b41689d8063e19e3a7dc,
+  explosionEffect: {fileID: 5481530993414605263, guid: 7a12b40fb78f3694ea3ba5830db032b4,
     type: 3}
+  explosionSound: {fileID: 8300000, guid: aee0096db160a9a449f94fb4f6bd448e, type: 3}
 --- !u!1 &8421765843509603067
 GameObject:
   m_ObjectHideFlags: 0

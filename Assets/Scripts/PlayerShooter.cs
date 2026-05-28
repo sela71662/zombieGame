@@ -12,6 +12,9 @@ public class PlayerShooter : MonoBehaviour {
     public GameObject throwableGrenadePrefab; // 투척용 수류탄 프리팹
     public float throwForce = 5f; // 수류탄 투척 힘
 
+    public int gramophoneCount = 0; // 보유한 축음기 개수
+    public GameObject gramophoneLurePrefab; // 설치용 축음기 프리팹
+
     private PlayerInput playerInput; // 플레이어의 입력(r버튼 눌렀는지 확인위해.재장전해야하니까)
     private Animator playerAnimator; // 애니메이터 컴포넌트
 
@@ -50,6 +53,12 @@ public class PlayerShooter : MonoBehaviour {
             Throw();
         }
 
+        // 축음기 설치 입력 감지
+        if (playerInput.lure && gramophoneCount > 0)
+        {
+            PlaceGramophone();
+        }
+
         UpdateUI();
     }
 
@@ -70,6 +79,15 @@ public class PlayerShooter : MonoBehaviour {
         }
     }
 
+    // 축음기 설치 로직
+    private void PlaceGramophone() {
+        gramophoneCount--; // 개수 차감
+
+        // 플레이어 앞 지면 근처에 축음기 생성
+        Vector3 spawnPos = transform.position + transform.forward * 1.0f;
+        Instantiate(gramophoneLurePrefab, spawnPos, transform.rotation);
+    }
+
     
     // 탄약 및 수류탄 UI 갱신
     private void UpdateUI() {
@@ -83,6 +101,9 @@ public class PlayerShooter : MonoBehaviour {
             
             // 수류탄 개수 UI 갱신
             UIManager.instance.UpdateGrenadeCount(grenadeCount);
+
+            // 축음기 개수 UI 갱신
+            UIManager.instance.UpdateGramophoneCount(gramophoneCount);
         }
     }
 

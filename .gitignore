@@ -58,3 +58,6 @@ crashlytics-build.properties
 Thumbs.db
 Icon?
 desktop.ini
+
+# Exclude large music collection (exceeds GitHub limits)
+/[Aa]ssets/Gregor Quendel - Classical Music - Collection/

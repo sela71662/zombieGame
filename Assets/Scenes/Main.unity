@@ -2601,7 +2601,13 @@ MonoBehaviour:
     type: 3}
   snowManPrefab: {fileID: 1276747439605540, guid: d781dc2ecd8586b4aa9b97f9c32f6d8f,
     type: 3}
-  summonCooldown: 30
+  snowManExplosionEffect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df,
+    type: 3}
+  snowManSecondaryEffect: {fileID: 7275548786892498063, guid: 5bc9a0bf98f67d240a936bf476ba2082,
+    type: 3}
+  snowManSlowAuraEffect: {fileID: 1920325297268671343, guid: 889dd67908ff48640a817f0b0074814e,
+    type: 3}
+  summonCooldown: 5
 --- !u!114 &1945268985
 MonoBehaviour:
   m_ObjectHideFlags: 0

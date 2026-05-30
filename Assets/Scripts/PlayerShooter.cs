@@ -16,6 +16,9 @@ public class PlayerShooter : MonoBehaviour {
     public GameObject gramophoneLurePrefab; // 설치용 축음기 프리팹
 
     public GameObject snowManPrefab; // 소환할 눈사람 프리팹
+    public GameObject snowManExplosionEffect; // 눈사람 전용 폭발 이펙트
+    public GameObject snowManSecondaryEffect; // 눈사람 보조 폭발 이펙트 (Ice Hit 등)
+    public GameObject snowManSlowAuraEffect; // 눈사람 슬로우 오라 이펙트 (IceMagicEF 등)
     private GameObject currentSnowMan; // 현재 소환된 눈사람
     public float summonCooldown = 30f; // 소환 쿨타임
     private float lastSummonTime = -30f; // 마지막 소환 시점 (처음엔 바로 소환 가능하도록)
@@ -109,8 +112,8 @@ public class PlayerShooter : MonoBehaviour {
             Destroy(currentSnowMan);
         }
 
-        // 플레이어의 오른쪽 위치 계산 (약 1.5m 옆)
-        Vector3 spawnPos = transform.position + transform.right * 1.5f;
+        // 플레이어의 오른쪽 위치 계산 (약 0.5m 옆 - AI의 followOffset과 일치시킴)
+        Vector3 spawnPos = transform.position + transform.right * 0.5f;
         
         // NavMesh 위의 가장 가까운 위치로 보정
         UnityEngine.AI.NavMeshHit hit;
@@ -122,11 +125,40 @@ public class PlayerShooter : MonoBehaviour {
         // 눈사람 생성
         currentSnowMan = Instantiate(snowManPrefab, spawnPos, transform.rotation);
         
-        // 눈사람에게 AI 스크립트 추가
-        SnowManAI aiScript = currentSnowMan.AddComponent<SnowManAI>();
+        // 눈사람에게 AI 스크립트 설정 (이미 프리팹에 붙어있으므로 GetComponent 사용)
+        SnowManAI aiScript = currentSnowMan.GetComponent<SnowManAI>();
+        if (aiScript == null)
+        {
+            aiScript = currentSnowMan.AddComponent<SnowManAI>();
+        }
+        
         aiScript.target = transform; // 따라갈 대상은 플레이어
-        // 폭발 이펙트 연결
-        aiScript.explosionEffect = throwableGrenadePrefab.GetComponent<ThrowableGrenade>().explosionEffect;
+        
+        // 폭발 이펙트 연결 (눈사람 전용 이펙트가 있으면 그것을 사용, 없으면 수류탄 이펙트 사용)
+        if (snowManExplosionEffect != null)
+        {
+            aiScript.explosionEffect = snowManExplosionEffect;
+        }
+        else if (throwableGrenadePrefab != null)
+        {
+            ThrowableGrenade grenade = throwableGrenadePrefab.GetComponent<ThrowableGrenade>();
+            if (grenade != null)
+            {
+                aiScript.explosionEffect = grenade.explosionEffect;
+            }
+        }
+
+        // 보조 폭발 이펙트 연결 (Ice Hit 등)
+        if (snowManSecondaryEffect != null)
+        {
+            aiScript.secondaryExplosionEffect = snowManSecondaryEffect;
+        }
+
+        // 슬로우 오라 이펙트 연결 (IceMagicEF 등)
+        if (snowManSlowAuraEffect != null)
+        {
+            aiScript.slowAuraEffectPrefab = snowManSlowAuraEffect;
+        }
     }
 
     

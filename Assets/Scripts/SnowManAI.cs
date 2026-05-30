@@ -15,16 +15,20 @@ public class SnowManAI : MonoBehaviour
     public float rotationSpeed = 10f;
 
     [Header("Attack Settings (Slow Aura)")]
-    public float slowRadius = 1.5f; // 슬로우 범위 반경
-    public float slowCenterOffset = 1f; // 정면으로부터의 거리
+    public float slowRadius = 0.5f; // 슬로우 범위 반경 (지름 1m)
+    public float slowCenterOffset = 1.5f; // 정면으로부터의 거리 (1.5m)
+    public float slowAuraHeight = 1.0f; // 슬로우 오라 높이 (공중에 띄우기 위함)
     public float slowMultiplier = 0.5f; // 50% 감속 효과
+    public GameObject slowAuraEffectPrefab; // 슬로우 오라 시각 이펙트
+    private GameObject currentSlowAuraEffect; // 생성된 슬로우 오라 인스턴스
     private List<Zombie> slowedZombies = new List<Zombie>();
 
     [Header("Explosion Settings")]
     public float lifeTime = 20f; // 생존 시간
-    public float explosionDamage = 500f; // 자폭 데미지
-    public float explosionRadius = 5f; // 자폭 범위
-    public GameObject explosionEffect; // 자폭 이펙트
+    public float explosionDamage = 300f; // 자폭 데미지
+    public float explosionRadius = 3f; // 자폭 범위
+    public GameObject explosionEffect; // 주 폭발 이펙트 (Icicle Bumb 등)
+    public GameObject secondaryExplosionEffect; // 보조 폭발 이펙트 (Ice Hit 등)
 
     private NavMeshAgent navMeshAgent;
     private Transform bodyTransform;
@@ -42,10 +46,25 @@ public class SnowManAI : MonoBehaviour
         if (navMeshAgent != null)
         {
             navMeshAgent.speed = followSpeed;
-            navMeshAgent.acceleration = 40f;
+            navMeshAgent.acceleration = 60f; // 더 빠른 반응성
+            navMeshAgent.angularSpeed = 0f; // 수동 회전 사용하므로 AI 회전은 끔
+            navMeshAgent.updateRotation = false; // 수동 회전 사용
             navMeshAgent.stoppingDistance = 0.1f; // 매우 가깝게 정지
             navMeshAgent.radius = 0.1f; // 에이전트의 충돌 반경을 최소화하여 플레이어 방해 안 함
             navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance; // 플레이어와 겹쳐도 되도록 회피 끔
+            
+            // 정지 상태 해제 확인
+            navMeshAgent.isStopped = false;
+
+            // 만약 시작 위치가 NavMesh 위가 아니라면 가장 가까운 곳으로 워프
+            if (!navMeshAgent.isOnNavMesh)
+            {
+                NavMeshHit hit;
+                if (NavMesh.SamplePosition(transform.position, out hit, 5.0f, NavMesh.AllAreas))
+                {
+                    navMeshAgent.Warp(hit.position);
+                }
+            }
         }
 
         // 3. 물리 엔진 간섭 차단
@@ -63,7 +82,16 @@ public class SnowManAI : MonoBehaviour
             if (script != this && !(script is NavMeshAgent)) script.enabled = false;
         }
 
-        // 5. 자폭 타이머 시작
+        // 5. 슬로우 오라 시각 효과 생성 (추가됨)
+        if (slowAuraEffectPrefab != null)
+        {
+            currentSlowAuraEffect = Instantiate(slowAuraEffectPrefab, transform);
+            // 정면 1.5m 위치 및 공중 높이 설정
+            currentSlowAuraEffect.transform.localPosition = new Vector3(0, slowAuraHeight, slowCenterOffset);
+            currentSlowAuraEffect.transform.localRotation = Quaternion.identity;
+        }
+
+        // 6. 자폭 타이머 시작
         StartCoroutine(SelfDestructRoutine());
 
         lastPosition = transform.position;
@@ -148,9 +176,17 @@ public class SnowManAI : MonoBehaviour
 
     private void Explode()
     {
+        // 주 폭발 이펙트 생성
         if (explosionEffect != null)
         {
             GameObject effect = Instantiate(explosionEffect, transform.position, transform.rotation);
+            Destroy(effect, 2f);
+        }
+
+        // 보조 폭발 이펙트 생성 (추가됨)
+        if (secondaryExplosionEffect != null)
+        {
+            GameObject effect = Instantiate(secondaryExplosionEffect, transform.position, transform.rotation);
             Destroy(effect, 2f);
         }
 

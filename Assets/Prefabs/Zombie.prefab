@@ -57,6 +57,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
+--- !u!198 &3264604003130012609 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198000011254678926, guid: da33d2f1d5c4b41689d8063e19e3a7dc,
+    type: 3}
+  m_PrefabInstance: {fileID: 3454643532474234447}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3458603989243859773 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000013488956786, guid: da33d2f1d5c4b41689d8063e19e3a7dc,
@@ -339,10 +345,8 @@ MonoBehaviour:
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 512
-  hitEffect: {fileID: 198000011254678926, guid: da33d2f1d5c4b41689d8063e19e3a7dc,
-    type: 3}
-  bloodSprayEffect: {fileID: 198000011254678926, guid: da33d2f1d5c4b41689d8063e19e3a7dc,
-    type: 3}
+  hitEffect: {fileID: 3264604003130012609}
+  bloodSprayEffect: {fileID: 3264604003130012609}
   deathSound: {fileID: 8300000, guid: b86f03005ed394911b43027aeaaedeb7, type: 3}
   hitSound: {fileID: 8300000, guid: c3d8accfc053f004ca665a1c8c4a6919, type: 3}
   damage: 20

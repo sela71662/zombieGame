@@ -19,8 +19,10 @@ public class SnowManAI : MonoBehaviour
     public float slowCenterOffset = 1.5f; // 정면으로부터의 거리 (1.5m)
     public float slowAuraHeight = 1.0f; // 슬로우 오라 높이 (공중에 띄우기 위함)
     public float slowMultiplier = 0.5f; // 50% 감속 효과
-    public GameObject slowAuraEffectPrefab; // 슬로우 오라 시각 이펙트
+    public GameObject slowAuraEffectPrefab; // 슬로우 오라 시각 이펙트 (공중)
+    public GameObject slowAuraGroundIndicatorPrefab; // 슬로우 오라 바닥 표시기 (데칼/메쉬)
     private GameObject currentSlowAuraEffect; // 생성된 슬로우 오라 인스턴스
+    private GameObject currentGroundIndicator; // 생성된 바닥 표시기 인스턴스
     private List<Zombie> slowedZombies = new List<Zombie>();
 
     [Header("Explosion Settings")]
@@ -91,7 +93,17 @@ public class SnowManAI : MonoBehaviour
             currentSlowAuraEffect.transform.localRotation = Quaternion.identity;
         }
 
-        // 6. 자폭 타이머 시작
+        // 6. 바닥 표시기 생성 (추가됨)
+        if (slowAuraGroundIndicatorPrefab != null)
+        {
+            currentGroundIndicator = Instantiate(slowAuraGroundIndicatorPrefab);
+            
+            // 물리적 충돌 방지: 바닥 표시기에 콜라이더가 있다면 비활성화
+            Collider c = currentGroundIndicator.GetComponent<Collider>();
+            if (c != null) c.enabled = false;
+        }
+
+        // 7. 자폭 타이머 시작
         StartCoroutine(SelfDestructRoutine());
 
         lastPosition = transform.position;
@@ -114,6 +126,33 @@ public class SnowManAI : MonoBehaviour
 
         // [슬로우 오라 로직]
         UpdateSlowAura();
+
+        // [바닥 표시기 위치 갱신]
+        if (currentGroundIndicator != null)
+        {
+            Vector3 auraCenter = transform.position + transform.forward * slowCenterOffset;
+            float groundY = transform.position.y; // 기본값은 눈사람 높이
+
+            // 슬로우 존 중심에서 위쪽 2m 지점에서 아래로 레이를 쏘아 실제 지면 높이 찾기
+            RaycastHit hit;
+            if (Physics.Raycast(auraCenter + Vector3.up * 2f, Vector3.down, out hit, 5f))
+            {
+                // 부딪힌 물체가 좀비나 플레이어가 아닐 때만 높이 갱신 (좀비 위로 올라타기 방지)
+                if (hit.collider.GetComponentInParent<Zombie>() == null && hit.collider.GetComponentInParent<PlayerMovement>() == null)
+                {
+                    groundY = hit.point.y;
+                }
+            }
+
+            // 바닥에 밀착시키되 Z-Fighting 방지를 위해 살짝 띄움 (0.05m)
+            currentGroundIndicator.transform.position = new Vector3(auraCenter.x, groundY + 0.05f, auraCenter.z);
+            // 바닥 평면에 맞게 회전 (Quad 기준 90도 눕힘)
+            currentGroundIndicator.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            
+            // 영역 크기를 slowRadius에 맞게 실시간 동기화 (지름 1m = 반지름 0.5m * 2)
+            float diameter = slowRadius * 2f;
+            currentGroundIndicator.transform.localScale = new Vector3(diameter, diameter, 1f);
+        }
     }
 
     private void UpdateVisuals()
@@ -140,23 +179,36 @@ public class SnowManAI : MonoBehaviour
     private void UpdateSlowAura()
     {
         Vector3 auraCenter = transform.position + transform.forward * slowCenterOffset;
+        
+        // 시각적 표시기의 위치와 크기가 이 auraCenter 및 slowRadius와 100% 일치해야 함
+        
+        // 1. 범위 내의 모든 콜라이더 탐색
         Collider[] colliders = Physics.OverlapSphere(auraCenter, slowRadius);
         List<Zombie> currentZombiesInRange = new List<Zombie>();
 
         foreach (var col in colliders)
         {
             Zombie zombie = col.GetComponent<Zombie>();
+            // 좀비가 존재하고, 죽지 않았으며, 좀비의 위치가 정확히 원 안에 있는지 다시 한 번 체크
             if (zombie != null && !zombie.dead)
             {
-                currentZombiesInRange.Add(zombie);
-                if (!slowedZombies.Contains(zombie))
+                // 실제 거리 체크를 통해 시각적 원과 판정 범위를 엄격하게 일치시킴
+                float distance = Vector3.Distance(new Vector3(auraCenter.x, 0, auraCenter.z), 
+                                                 new Vector3(zombie.transform.position.x, 0, zombie.transform.position.z));
+                
+                if (distance <= slowRadius)
                 {
-                    zombie.ApplySlow(slowMultiplier);
-                    slowedZombies.Add(zombie);
+                    currentZombiesInRange.Add(zombie);
+                    if (!slowedZombies.Contains(zombie))
+                    {
+                        zombie.ApplySlow(slowMultiplier);
+                        slowedZombies.Add(zombie);
+                    }
                 }
             }
         }
 
+        // 2. 범위를 벗어난 좀비들 속도 복구
         for (int i = slowedZombies.Count - 1; i >= 0; i--)
         {
             Zombie z = slowedZombies[i];
@@ -166,6 +218,14 @@ public class SnowManAI : MonoBehaviour
                 slowedZombies.RemoveAt(i);
             }
         }
+    }
+
+    // 에디터 뷰에서 슬로우 범위를 선으로 표시 (디버깅용)
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Vector3 auraCenter = transform.position + transform.forward * slowCenterOffset;
+        Gizmos.DrawWireSphere(auraCenter, slowRadius);
     }
 
     private IEnumerator SelfDestructRoutine()
@@ -205,6 +265,12 @@ public class SnowManAI : MonoBehaviour
             if (z != null && !z.dead) z.RemoveSlow();
         }
         
+        // 바닥 표시기 제거 (추가됨)
+        if (currentGroundIndicator != null)
+        {
+            Destroy(currentGroundIndicator);
+        }
+
         Destroy(gameObject);
     }
 }

@@ -101,13 +101,19 @@ MonoBehaviour:
   followOffset: {x: 0.5, y: 0, z: 0}
   followSpeed: 8
   rotationSpeed: 10
-  slowRadius: 1
-  slowCenterOffset: 1
-  slowMultiplier: 0.5
-  lifeTime: 5
-  explosionDamage: 300
-  explosionRadius: 5
+  slowRadius: 1.5
+  slowCenterOffset: 2.5
+  slowAuraHeight: 6
+  slowMultiplier: 0.2
+  slowAuraEffectPrefab: {fileID: 1920325297268671343, guid: 889dd67908ff48640a817f0b0074814e,
+    type: 3}
+  slowAuraGroundIndicatorPrefab: {fileID: 0}
+  lifeTime: 20
+  explosionDamage: 200
+  explosionRadius: 3
   explosionEffect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df,
+    type: 3}
+  secondaryExplosionEffect: {fileID: 7275548786892498063, guid: 5bc9a0bf98f67d240a936bf476ba2082,
     type: 3}
 --- !u!1 &1424474728818972
 GameObject:

@@ -2607,6 +2607,8 @@ MonoBehaviour:
     type: 3}
   snowManSlowAuraEffect: {fileID: 1920325297268671343, guid: 889dd67908ff48640a817f0b0074814e,
     type: 3}
+  snowManGroundIndicator: {fileID: 5413613002973002969, guid: 78c3db833509fc84b8b57e69613841f0,
+    type: 3}
   summonCooldown: 5
 --- !u!114 &1945268985
 MonoBehaviour:

@@ -19,6 +19,7 @@ public class PlayerShooter : MonoBehaviour {
     public GameObject snowManExplosionEffect; // 눈사람 전용 폭발 이펙트
     public GameObject snowManSecondaryEffect; // 눈사람 보조 폭발 이펙트 (Ice Hit 등)
     public GameObject snowManSlowAuraEffect; // 눈사람 슬로우 오라 이펙트 (IceMagicEF 등)
+    public GameObject snowManGroundIndicator; // 눈사람 바닥 표시기 (Quad 등)
     private GameObject currentSnowMan; // 현재 소환된 눈사람
     public float summonCooldown = 30f; // 소환 쿨타임
     private float lastSummonTime = -30f; // 마지막 소환 시점 (처음엔 바로 소환 가능하도록)
@@ -158,6 +159,12 @@ public class PlayerShooter : MonoBehaviour {
         if (snowManSlowAuraEffect != null)
         {
             aiScript.slowAuraEffectPrefab = snowManSlowAuraEffect;
+        }
+
+        // 바닥 표시기 연결 (Quad 등)
+        if (snowManGroundIndicator != null)
+        {
+            aiScript.slowAuraGroundIndicatorPrefab = snowManGroundIndicator;
         }
     }
 

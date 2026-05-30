@@ -154,20 +154,23 @@ public class Zombie : LivingEntity
     // 데미지를 입었을 때 실행할 처리
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal) {
 
-        //아직 사망하지 않은 경우에만 피격 효과 재생
+        // 아직 사망하지 않은 경우에만 피격 효과 재생
         if (!dead)
         {
-            //공격 받은 지점과 방향으로 파티클 효과를 재생
-            hitEffect.transform.position = hitPoint;
-            hitEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
-            hitEffect.Play();
+            // 피격 파티클 효과 생성 및 재생
+            if (hitEffect != null)
+            {
+                ParticleSystem effect = Instantiate(hitEffect, hitPoint, Quaternion.LookRotation(hitNormal));
+                effect.Play();
+                Destroy(effect.gameObject, 2f);
+            }
 
-            // 혈흔 효과 재생
+            // 혈흔 파티클 효과 생성 및 재생
             if (bloodSprayEffect != null)
             {
-                bloodSprayEffect.transform.position = hitPoint;
-                bloodSprayEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
-                bloodSprayEffect.Play();
+                ParticleSystem effect = Instantiate(bloodSprayEffect, hitPoint, Quaternion.LookRotation(hitNormal));
+                effect.Play();
+                Destroy(effect.gameObject, 2f);
             }
 
             //피격 효과음 재생

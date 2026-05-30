@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 5cfc951b942655a4194744d6f59a14ba
+timeCreated: 1479164400
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/JoyPad/Scripts/JoystickFire.cs
+  uploadId: 245387

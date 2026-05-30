@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: fb7e539b97c005346b403eab30bc527e
+timeCreated: 1481658123
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/Player/Scripts/RollControl.cs
+  uploadId: 245387

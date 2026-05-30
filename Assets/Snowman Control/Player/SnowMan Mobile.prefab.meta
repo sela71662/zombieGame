@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 94ed9ef021e8cf74d8ad243b5eb902a5
+timeCreated: 1524330897
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/Player/SnowMan Mobile.prefab
+  uploadId: 245387

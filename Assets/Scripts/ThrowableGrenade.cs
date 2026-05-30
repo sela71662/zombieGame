@@ -4,7 +4,7 @@ using UnityEngine;
 public class ThrowableGrenade : MonoBehaviour
 {
     public float damage = 100f; // 폭발 데미지
-    public float explosionRadius = 5f; // 폭발 반경
+    public float explosionRadius = 3f; // 폭발 반경
     public float fuseTime = 2f; // 기폭 시간
     public GameObject explosionEffect; // 폭발 이펙트 프리팹
     public AudioClip explosionSound; // 폭발 사운드 (Explosion3)

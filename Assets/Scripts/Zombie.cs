@@ -12,6 +12,7 @@ public class Zombie : LivingEntity
     private NavMeshAgent navMeshAgent; // 경로 계산 AI 에이전트
 
     public ParticleSystem hitEffect; // 피격 시 재생할 파티클 효과
+    public ParticleSystem bloodSprayEffect; // 혈흔 효과
     public AudioClip deathSound; // 사망 시 재생할 소리
     public AudioClip hitSound; // 피격 시 재생할 소리
 
@@ -22,6 +23,8 @@ public class Zombie : LivingEntity
     public float damage = 20f; // 공격력
     public float timeBetAttack = 0.5f; // 공격 간격
     private float lastAttackTime; // 마지막 공격 시점
+
+    private float originalSpeed; // 원래 이동 속도 기억용
 
     // 추적할 대상이 존재하는지 알려주는 프로퍼티
     private bool hasTarget {
@@ -47,6 +50,12 @@ public class Zombie : LivingEntity
         //렌더러 컴포넌트는 자식 게임 오브젝트에게 있으므로
         //GetComponentChildren() 메서드 사용
         zombieRenderer = GetComponentInChildren<Renderer>();
+        
+        // 초기 속도 저장
+        if (navMeshAgent != null)
+        {
+            originalSpeed = navMeshAgent.speed;
+        }
     }
 
     // 좀비 AI의 초기 스펙을 결정하는 셋업 메서드
@@ -59,9 +68,28 @@ public class Zombie : LivingEntity
         damage = zombieData.damage;
         //네비메시 에이전트의 이동 속도 설정
         navMeshAgent.speed = zombieData.speed;
+        originalSpeed = zombieData.speed; // 다시 갱신
         //렌더러가 사용 중인 머테리얼의 컬러를 변경, 외형 색이 변함
         zombieRenderer.material.color = zombieData.skinColor;
         
+    }
+
+    // 느려짐 효과 적용 (비율, 예: 0.5면 50% 속도)
+    public void ApplySlow(float speedMultiplier)
+    {
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            navMeshAgent.speed = originalSpeed * speedMultiplier;
+        }
+    }
+
+    // 느려짐 효과 제거 (원래 속도로 복구)
+    public void RemoveSlow()
+    {
+        if (navMeshAgent != null && navMeshAgent.enabled)
+        {
+            navMeshAgent.speed = originalSpeed;
+        }
     }
 
     private void Start() {
@@ -133,6 +161,14 @@ public class Zombie : LivingEntity
             hitEffect.transform.position = hitPoint;
             hitEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
             hitEffect.Play();
+
+            // 혈흔 효과 재생
+            if (bloodSprayEffect != null)
+            {
+                bloodSprayEffect.transform.position = hitPoint;
+                bloodSprayEffect.transform.rotation = Quaternion.LookRotation(hitNormal);
+                bloodSprayEffect.Play();
+            }
 
             //피격 효과음 재생
             zombieAudioPlayer.PlayOneShot(hitSound);

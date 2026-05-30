@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 7d7aff197c83f2244a2535c3aa9ad473
+timeCreated: 1524324262
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/JoyPad/JoyPad Right.prefab
+  uploadId: 245387

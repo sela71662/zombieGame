@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5b245ac08aa62a04e80d3a362db13915
+timeCreated: 1478735380
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/Phisic Materials/Phx Mat.physicMaterial
+  uploadId: 245387

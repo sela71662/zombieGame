@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f0141376fea3ae04d9a76e2eaa9b7a46
+timeCreated: 1524336313
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/documentation.txt
+  uploadId: 245387

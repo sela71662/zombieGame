@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 20a8480f16610fb4b9dcb358fd9b843e
+timeCreated: 1525305351
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 25800000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/Scenes/Demo Mobile/LightingData.asset
+  uploadId: 245387

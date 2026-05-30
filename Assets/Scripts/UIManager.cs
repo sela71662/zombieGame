@@ -27,6 +27,24 @@ public class UIManager : MonoBehaviour {
     public Text grenadeText;
     public Text gramophoneText;
 
+    [Header("SnowMan Cooldown UI")]
+    public Image snowManCooldownImage; // 쿨타임 표시용 원형 이미지 (Radial Fill)
+    public CanvasGroup snowManDisplayGroup; // 아이콘의 흐림 처리를 위한 그룹
+
+    public void UpdateSnowManCooldownUI(float fillAmount, bool isCooldown)
+    {
+        if (snowManCooldownImage != null)
+        {
+            snowManCooldownImage.fillAmount = fillAmount;
+        }
+
+        if (snowManDisplayGroup != null)
+        {
+            // 쿨타임 중이면 흐리게(0.3), 아니면 원래대로(1.0)
+            snowManDisplayGroup.alpha = isCooldown ? 0.3f : 1.0f;
+        }
+    }
+
     public void UpdateGrenadeCount(int count)
     {
         grenadeText.text = count.ToString();

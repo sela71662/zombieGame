@@ -1,0 +1,16 @@
+Easy to use BB Droid controlls.
+
+On default new scene:
+1. delete the default Main Camera camera and add "Player_Camera" prefab from Camera folder to the scene.
+2. Add "SnowMan" prefab from Player folder to the scene.
+3. Create EventSystem to the scene (right click on hierarchy tab then select UI / EventSystem)
+4. Add your levelobjects and add "Ground" tag to you ground objects. (important for droid jump control)
+
+For mobile version:
+1. delete the default Main Camera camera and add "Player_Camera" prefab from Camera folder to the scene.
+2. Add "SnowMan Mobile" prefab from Player folder to the scene.
+3. Add "JoyPad Left" or "JoyPad Right" prefab to the scene from JoyPad folder.
+4. Create EventSystem to the scene (right click on hierarchy tab then select UI / EventSystem)
+5. Add your level objects and add "Ground" tag to you ground objects. (important for droid jump control)
+
+Check "Demo" and "Demo Mobile" scenes as reference.

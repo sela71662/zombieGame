@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // 주어진 Gun 오브젝트를 쏘거나 재장전
 // 알맞은 애니메이션을 재생하고 IK를 사용해 캐릭터 양손이 총에 위치하도록 조정
@@ -14,6 +14,11 @@ public class PlayerShooter : MonoBehaviour {
 
     public int gramophoneCount = 0; // 보유한 축음기 개수
     public GameObject gramophoneLurePrefab; // 설치용 축음기 프리팹
+
+    public GameObject snowManPrefab; // 소환할 눈사람 프리팹
+    private GameObject currentSnowMan; // 현재 소환된 눈사람
+    public float summonCooldown = 30f; // 소환 쿨타임
+    private float lastSummonTime = -30f; // 마지막 소환 시점 (처음엔 바로 소환 가능하도록)
 
     private PlayerInput playerInput; // 플레이어의 입력(r버튼 눌렀는지 확인위해.재장전해야하니까)
     private Animator playerAnimator; // 애니메이터 컴포넌트
@@ -53,10 +58,16 @@ public class PlayerShooter : MonoBehaviour {
             Throw();
         }
 
-        // 축음기 설치 입력 감지
+        // 축음기 설치 입력 감지 - 쿨타임 없이 즉시 설치
         if (playerInput.lure && gramophoneCount > 0)
         {
             PlaceGramophone();
+        }
+
+        // 눈사람 소환 입력 감지 (T 키) - 30초 쿨타임 체크
+        if (playerInput.summon && Time.time >= lastSummonTime + summonCooldown)
+        {
+            SummonSnowMan();
         }
 
         UpdateUI();
@@ -88,6 +99,36 @@ public class PlayerShooter : MonoBehaviour {
         Instantiate(gramophoneLurePrefab, spawnPos, transform.rotation);
     }
 
+    // 눈사람 소환 로직
+    private void SummonSnowMan() {
+        lastSummonTime = Time.time; // 소환 시점 기록
+
+        // 이미 소환된 눈사람이 있다면 제거
+        if (currentSnowMan != null)
+        {
+            Destroy(currentSnowMan);
+        }
+
+        // 플레이어의 오른쪽 위치 계산 (약 1.5m 옆)
+        Vector3 spawnPos = transform.position + transform.right * 1.5f;
+        
+        // NavMesh 위의 가장 가까운 위치로 보정
+        UnityEngine.AI.NavMeshHit hit;
+        if (UnityEngine.AI.NavMesh.SamplePosition(spawnPos, out hit, 2.0f, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            spawnPos = hit.position;
+        }
+        
+        // 눈사람 생성
+        currentSnowMan = Instantiate(snowManPrefab, spawnPos, transform.rotation);
+        
+        // 눈사람에게 AI 스크립트 추가
+        SnowManAI aiScript = currentSnowMan.AddComponent<SnowManAI>();
+        aiScript.target = transform; // 따라갈 대상은 플레이어
+        // 폭발 이펙트 연결
+        aiScript.explosionEffect = throwableGrenadePrefab.GetComponent<ThrowableGrenade>().explosionEffect;
+    }
+
     
     // 탄약 및 수류탄 UI 갱신
     private void UpdateUI() {
@@ -104,6 +145,12 @@ public class PlayerShooter : MonoBehaviour {
 
             // 축음기 개수 UI 갱신
             UIManager.instance.UpdateGramophoneCount(gramophoneCount);
+
+            // 눈사람 쿨타임 UI 갱신
+            float timePassed = Time.time - lastSummonTime;
+            float cooldownRatio = Mathf.Clamp01(1.0f - (timePassed / summonCooldown));
+            bool isCooldown = timePassed < summonCooldown;
+            UIManager.instance.UpdateSnowManCooldownUI(cooldownRatio, isCooldown);
         }
     }
 

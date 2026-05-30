@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: b6e7899eaeb42474fa9885bf5eead86c
+timeCreated: 1524323676
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 117142
+  packageName: Rolling Snowman Control - Mobile Ready
+  packageVersion: 1.0
+  assetPath: Assets/Snowman Control/Camera/Player_Camera.prefab
+  uploadId: 245387

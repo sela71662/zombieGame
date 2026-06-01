@@ -342,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 170482552}
   serializedVersion: 2
   m_LocalRotation: {x: 0.41852477, y: 0.34116474, z: -0.17335863, w: 0.82364464}
-  m_LocalPosition: {x: -8, y: 16, z: -8}
+  m_LocalPosition: {x: -6.37, y: 16, z: -10.307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -794,7 +794,7 @@ Transform:
   m_GameObject: {fileID: 354414908}
   serializedVersion: 2
   m_LocalRotation: {x: 0.41852477, y: 0.34116474, z: -0.1733586, w: 0.82364464}
-  m_LocalPosition: {x: -8, y: 16, z: -8}
+  m_LocalPosition: {x: -6.37, y: 16, z: -10.307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1219,7 +1219,6 @@ MonoBehaviour:
   zombieDatas:
   - {fileID: 11400000, guid: 4835732511236374e966f88f4ab5a3a3, type: 2}
   - {fileID: 11400000, guid: 349e14b0207d4434dacaf7fb77c48298, type: 2}
-  - {fileID: 11400000, guid: 960e10fe562fe2b489214ff4581a8c77, type: 2}
   - {fileID: 11400000, guid: 960e10fe562fe2b489214ff4581a8c77, type: 2}
   spawnPoints:
   - {fileID: 208982150}
@@ -2592,11 +2591,11 @@ MonoBehaviour:
   gunPivot: {fileID: 1134994989}
   leftHandMount: {fileID: 1850112926}
   rightHandMount: {fileID: 171022158}
-  grenadeCount: 100
+  grenadeCount: 3
   throwableGrenadePrefab: {fileID: 6778764985228327200, guid: eb42e12f826b96d4ca3550cfa07a0722,
     type: 3}
   throwForce: 5
-  gramophoneCount: 5
+  gramophoneCount: 0
   gramophoneLurePrefab: {fileID: 6125377157684126347, guid: bbc43faec3bd7d345b606ad6614cf06c,
     type: 3}
   snowManPrefab: {fileID: 1276747439605540, guid: d781dc2ecd8586b4aa9b97f9c32f6d8f,
@@ -2609,7 +2608,9 @@ MonoBehaviour:
     type: 3}
   snowManGroundIndicator: {fileID: 5413613002973002969, guid: 78c3db833509fc84b8b57e69613841f0,
     type: 3}
-  summonCooldown: 5
+  snowManSlowAuraSound: {fileID: 8300000, guid: c63d70920d962314db7dc6d5c99e53a7,
+    type: 3}
+  summonCooldown: 30
 --- !u!114 &1945268985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2802,7 +2803,7 @@ PrefabInstance:
     - target: {fileID: 8515068912216169379, guid: 2aecd00cc7f695145a4605d622d04efc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.63
       objectReference: {fileID: 0}
     - target: {fileID: 8515068912216169379, guid: 2aecd00cc7f695145a4605d622d04efc,
         type: 3}
@@ -2812,7 +2813,7 @@ PrefabInstance:
     - target: {fileID: 8515068912216169379, guid: 2aecd00cc7f695145a4605d622d04efc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -2.307
       objectReference: {fileID: 0}
     - target: {fileID: 8515068912216169379, guid: 2aecd00cc7f695145a4605d622d04efc,
         type: 3}

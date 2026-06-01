@@ -15,20 +15,23 @@ public class SnowManAI : MonoBehaviour
     public float rotationSpeed = 10f;
 
     [Header("Attack Settings (Slow Aura)")]
-    public float slowRadius = 0.5f; // 슬로우 범위 반경 (지름 1m)
-    public float slowCenterOffset = 1.5f; // 정면으로부터의 거리 (1.5m)
-    public float slowAuraHeight = 1.0f; // 슬로우 오라 높이 (공중에 띄우기 위함)
-    public float slowMultiplier = 0.5f; // 50% 감속 효과
+    public float slowRadius = 2f; // 슬로우 범위 반경 (지름 2m)
+    public float slowCenterOffset = 2f; // 정면으로부터의 거리 (2m)
+    public float slowAuraHeight = 3f; // 슬로우 오라 높이
+    public float slowMultiplier = 0.2f; // 80%로 감속 효과
     public GameObject slowAuraEffectPrefab; // 슬로우 오라 시각 이펙트 (공중)
     public GameObject slowAuraGroundIndicatorPrefab; // 슬로우 오라 바닥 표시기 (데칼/메쉬)
+    public AudioClip slowAuraSound; // 슬로우 오라 사운드 (Magic_Glow 등)
+    public float slowAuraVolume = 1f; // 슬로우 오라 볼륨
+    private AudioSource auraAudioSource; // 사운드 재생기
     private GameObject currentSlowAuraEffect; // 생성된 슬로우 오라 인스턴스
     private GameObject currentGroundIndicator; // 생성된 바닥 표시기 인스턴스
     private List<Zombie> slowedZombies = new List<Zombie>();
 
     [Header("Explosion Settings")]
     public float lifeTime = 20f; // 생존 시간
-    public float explosionDamage = 300f; // 자폭 데미지
-    public float explosionRadius = 3f; // 자폭 범위
+    public float explosionDamage = 200f; // 자폭 데미지
+    public float explosionRadius = 3.5f; // 자폭 범위
     public GameObject explosionEffect; // 주 폭발 이펙트 (Icicle Bumb 등)
     public GameObject secondaryExplosionEffect; // 보조 폭발 이펙트 (Ice Hit 등)
 
@@ -69,13 +72,26 @@ public class SnowManAI : MonoBehaviour
             }
         }
 
-        // 3. 물리 엔진 간섭 차단
+        // 3. 물리 엔진 간섭 차단 및 오디오 설정 (수정됨)
         Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();
         foreach (Rigidbody rb in rbs)
         {
             rb.isKinematic = true;
             rb.useGravity = false;
         }
+
+        auraAudioSource = GetComponent<AudioSource>();
+        if (auraAudioSource == null)
+        {
+            auraAudioSource = gameObject.AddComponent<AudioSource>();
+        }
+        auraAudioSource.playOnAwake = false;
+        auraAudioSource.loop = true;
+        auraAudioSource.spatialBlend = 1.0f; // 3D 사운드 설정
+        auraAudioSource.minDistance = 5f; // 이 거리까지는 최대 볼륨 유지
+        auraAudioSource.maxDistance = 20f; // 이 거리 이후로는 안 들림
+        auraAudioSource.volume = slowAuraVolume;
+        auraAudioSource.clip = slowAuraSound;
 
         // 4. 기존 조작 스크립트 비활성화
         MonoBehaviour[] scripts = GetComponentsInChildren<MonoBehaviour>();
@@ -144,14 +160,22 @@ public class SnowManAI : MonoBehaviour
                 }
             }
 
-            // 바닥에 밀착시키되 Z-Fighting 방지를 위해 살짝 띄움 (0.05m)
+            // 1. 바닥 표시기 위치 및 회전 (바닥에 밀착)
             currentGroundIndicator.transform.position = new Vector3(auraCenter.x, groundY + 0.05f, auraCenter.z);
-            // 바닥 평면에 맞게 회전 (Quad 기준 90도 눕힘)
             currentGroundIndicator.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             
-            // 영역 크기를 slowRadius에 맞게 실시간 동기화 (지름 1m = 반지름 0.5m * 2)
+            // 영역 크기를 slowRadius에 맞게 실시간 동기화
             float diameter = slowRadius * 2f;
             currentGroundIndicator.transform.localScale = new Vector3(diameter, diameter, 1f);
+
+            // 2. 공중 이펙트(IceMagicEF) 위치 및 회전 (추가됨)
+            if (currentSlowAuraEffect != null)
+            {
+                // 바닥 높이에서 slowAuraHeight만큼 띄움
+                currentSlowAuraEffect.transform.position = new Vector3(auraCenter.x, groundY + slowAuraHeight, auraCenter.z);
+                // 마법진이 수평을 유지하도록 회전값 초기화
+                currentSlowAuraEffect.transform.rotation = Quaternion.identity;
+            }
         }
     }
 
@@ -216,6 +240,19 @@ public class SnowManAI : MonoBehaviour
             {
                 if (z != null && !z.dead) z.RemoveSlow();
                 slowedZombies.RemoveAt(i);
+            }
+        }
+
+        // 3. 사운드 재생 제어 (추가됨)
+        if (auraAudioSource != null && slowAuraSound != null)
+        {
+            if (slowedZombies.Count > 0)
+            {
+                if (!auraAudioSource.isPlaying) auraAudioSource.Play();
+            }
+            else
+            {
+                if (auraAudioSource.isPlaying) auraAudioSource.Stop();
             }
         }
     }

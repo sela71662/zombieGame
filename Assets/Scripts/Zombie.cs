@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI; // AI, 내비게이션 시스템 관련 코드 가져오기
@@ -25,6 +25,9 @@ public class Zombie : LivingEntity
     private float lastAttackTime; // 마지막 공격 시점
 
     private float originalSpeed; // 원래 이동 속도 기억용
+
+    private bool canSplit = false; // 분열 가능 여부
+    private bool hasSplit = false; // 중복 분열 방지 플래그
 
     // 추적할 대상이 존재하는지 알려주는 프로퍼티
     private bool hasTarget {
@@ -71,7 +74,9 @@ public class Zombie : LivingEntity
         originalSpeed = zombieData.speed; // 다시 갱신
         //렌더러가 사용 중인 머테리얼의 컬러를 변경, 외형 색이 변함
         zombieRenderer.material.color = zombieData.skinColor;
-        
+
+        // 분열 데이터 설정
+        canSplit = zombieData.canSplit;
     }
 
     // 느려짐 효과 적용 (비율, 예: 0.5면 50% 속도)
@@ -157,6 +162,14 @@ public class Zombie : LivingEntity
         // 아직 사망하지 않은 경우에만 피격 효과 재생
         if (!dead)
         {
+            // 분열 로직 실행 (핑크 좀비 전용)
+            if (canSplit && !hasSplit)
+            {
+                hasSplit = true;
+                Split();
+                return; // 분열 시 즉시 종료 (본체는 사라짐)
+            }
+
             // 피격 파티클 효과 생성 및 재생
             if (hitEffect != null)
             {
@@ -178,6 +191,31 @@ public class Zombie : LivingEntity
         }
         // LivingEntity의 OnDamage()를 실행하여 데미지 적용
         base.OnDamage(damage, hitPoint, hitNormal);
+    }
+
+    // 좀비 분열 로직
+    private void Split()
+    {
+        // 주변에 3마리의 작은 좀비 생성
+        for (int i = 0; i < 3; i++)
+        {
+            // 현재 위치에서 약간의 랜덤 오프셋 부여
+            Vector3 spawnOffset = new Vector3(Random.Range(-0.5f, 0.5f), 0, Random.Range(-0.5f, 0.5f));
+            Zombie miniZombie = Instantiate(this, transform.position + spawnOffset, transform.rotation);
+            
+            // 작은 좀비는 분열하지 않도록 설정
+            miniZombie.canSplit = false;
+            
+            // 크기를 0.5배로 축소
+            miniZombie.transform.localScale = transform.localScale * 0.5f;
+            
+            // 능력치 재설정 (이미 Setup이 호출된 상태이므로 수동 조정)
+            miniZombie.health = startingHealth; 
+            miniZombie.damage = this.damage; 
+        }
+
+        // 본체는 보이지 않게 처리 후 즉시 파괴 (Die 효과 생략)
+        Destroy(gameObject);
     }
 
     // 사망 처리

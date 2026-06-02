@@ -64,6 +64,7 @@ public class ZombieSpawner : MonoBehaviour {
 
         zombie.onDeath += () => {
             zombies.Remove(zombie);
+            // 마지막 7웨이브의 마지막 좀비가 죽는 '그 찰나'에 즉시 실행
             if (wave == 7 && zombies.Count == 0 && !isFinalSequenceStarted)
             {
                 isFinalSequenceStarted = true;
@@ -75,30 +76,47 @@ public class ZombieSpawner : MonoBehaviour {
     }
 
     private IEnumerator FinalKillSequence(Vector3 targetPosition) {
-        Time.timeScale = 0.2f;
+        // 1. 마지막 일격 시점에 즉시 슬로우 모션 (0.15배속)
+        Time.timeScale = 0.15f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
         Camera mainCam = Camera.main;
-        if (mainCam != null)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (mainCam != null && player != null)
         {
+            // 시네머신 브레인 해제
+            MonoBehaviour brain = mainCam.GetComponent("CinemachineBrain") as MonoBehaviour;
+            if (brain != null) brain.enabled = false;
+
             Vector3 startPos = mainCam.transform.position;
             Quaternion startRot = mainCam.transform.rotation;
-            Vector3 zoomPos = targetPosition + Vector3.up * 2.0f - mainCam.transform.forward * 3.0f;
-            Quaternion zoomRot = Quaternion.LookRotation((targetPosition + Vector3.up * 0.5f) - zoomPos);
+            
+            // 카메라 높이를 1m 더 올림 (기존 up * 2.0f -> 3.0f)
+            Vector3 zoomPos = player.transform.position - player.transform.forward * 3.0f + Vector3.up * 3.0f;
+            // 타겟 지점도 약간 위로 보정하여 전체 구도 안정화
+            Vector3 lookTarget = Vector3.Lerp(player.transform.position, targetPosition, 0.5f) + Vector3.up * 1.2f;
+            Quaternion zoomRot = Quaternion.LookRotation(lookTarget - zoomPos);
 
             float elapsed = 0f;
-            float duration = 0.8f;
+            float duration = 2.5f; // 줌인 2.5초
+
             while (elapsed < duration)
             {
                 elapsed += Time.unscaledDeltaTime;
                 float t = elapsed / duration;
-                mainCam.transform.position = Vector3.Lerp(startPos, zoomPos, t);
-                mainCam.transform.rotation = Quaternion.Slerp(startRot, zoomRot, t);
+                float smoothT = 1f - Mathf.Pow(1f - t, 3f);
+                
+                mainCam.transform.position = Vector3.Lerp(startPos, zoomPos, smoothT);
+                mainCam.transform.rotation = Quaternion.Slerp(startRot, zoomRot, smoothT);
                 yield return null;
             }
         }
 
-        yield return new WaitForSecondsRealtime(2.5f);
+        // 3. 줌인이 끝난 후 4초 동안 여운 유지 (요청 사항 반영)
+        yield return new WaitForSecondsRealtime(4.0f);
+        
+        // 4. 시간 복구 및 엔딩 씬 전환
         Time.timeScale = 1.0f;
         Time.fixedDeltaTime = 0.02f;
         SceneManager.LoadScene("Ending Scene");

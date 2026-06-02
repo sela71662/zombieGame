@@ -1220,12 +1220,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4835732511236374e966f88f4ab5a3a3, type: 2}
   - {fileID: 11400000, guid: 349e14b0207d4434dacaf7fb77c48298, type: 2}
   - {fileID: 11400000, guid: 960e10fe562fe2b489214ff4581a8c77, type: 2}
+  - {fileID: 11400000, guid: c43e11af9d00a8441b045462346f8040, type: 2}
   spawnPoints:
   - {fileID: 208982150}
   - {fileID: 137179025}
   - {fileID: 1142900684}
   - {fileID: 1317262167}
-  grassMaterial: {fileID: 2100000, guid: 32d4c6ca8b8b94c0fb75f01f06d0d8ed, type: 2}
+  snowGrassMaterial: {fileID: 2100000, guid: 0d4d0000bfa96264abdc514c444569a5, type: 2}
+  startColor: {r: 0.5411765, g: 0.70980394, b: 0.28627452, a: 1}
+  targetColor: {r: 0.8627451, g: 0.9372549, b: 0.99215686, a: 1}
 --- !u!4 &697085512
 Transform:
   m_ObjectHideFlags: 0
@@ -1451,6 +1454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level Art
       objectReference: {fileID: 0}
+    - target: {fileID: 1884695222760582, guid: 49b04053ea2dc49ae8eae12418134ef1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4449291502637212, guid: 49b04053ea2dc49ae8eae12418134ef1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1491,6 +1498,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4980162625215884, guid: 49b04053ea2dc49ae8eae12418134ef1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23541737263913548, guid: 49b04053ea2dc49ae8eae12418134ef1,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 23541737263913548, guid: 49b04053ea2dc49ae8eae12418134ef1,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7c7e5c1072bdb4a1fbde675e686cd480, type: 2}
+    - target: {fileID: 23541737263913548, guid: 49b04053ea2dc49ae8eae12418134ef1,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0d4d0000bfa96264abdc514c444569a5, type: 2}
+    - target: {fileID: 23541737263913548, guid: 49b04053ea2dc49ae8eae12418134ef1,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7c7e5c1072bdb4a1fbde675e686cd480, type: 2}
+    - target: {fileID: 23541737263913548, guid: 49b04053ea2dc49ae8eae12418134ef1,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0e1d04ffdfec3a34a9d7884aed510d1c, type: 2}
     - target: {fileID: 108126030957071208, guid: 49b04053ea2dc49ae8eae12418134ef1,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
@@ -2592,7 +2628,7 @@ MonoBehaviour:
   gunPivot: {fileID: 1134994989}
   leftHandMount: {fileID: 1850112926}
   rightHandMount: {fileID: 171022158}
-  grenadeCount: 3
+  grenadeCount: 100
   throwableGrenadePrefab: {fileID: 6778764985228327200, guid: eb42e12f826b96d4ca3550cfa07a0722,
     type: 3}
   throwForce: 5

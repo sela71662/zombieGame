@@ -8,7 +8,7 @@ public class PlayerShooter : MonoBehaviour {
     public Transform leftHandMount; // 총의 왼쪽 손잡이, 왼손이 위치할 지점
     public Transform rightHandMount; // 총의 오른쪽 손잡이, 오른손이 위치할 지점
 
-    public int grenadeCount = 0; // 보유한 수류탄 개수
+    public int grenadeCount = 3; // 보유한 수류탄 개수
     public GameObject throwableGrenadePrefab; // 투척용 수류탄 프리팹
     public float throwForce = 5f; // 수류탄 투척 힘
 

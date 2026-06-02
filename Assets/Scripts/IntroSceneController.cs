@@ -22,4 +22,18 @@ public class IntroSceneController : MonoBehaviour
     {
         SceneManager.LoadScene(gameSceneName);
     }
+
+    // 게임 종료 함수
+    public void ExitGame()
+    {
+        Debug.Log("Game Exit Clicked");
+        
+        #if UNITY_EDITOR
+            // 유니티 에디터에서 실행 중일 때
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            // 실제 빌드된 게임에서 실행 중일 때
+            Application.Quit();
+        #endif
+    }
 }

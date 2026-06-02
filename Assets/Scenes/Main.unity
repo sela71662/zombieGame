@@ -368,7 +368,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
@@ -1228,7 +1228,7 @@ MonoBehaviour:
   - {fileID: 1317262167}
   snowGrassMaterial: {fileID: 2100000, guid: 0d4d0000bfa96264abdc514c444569a5, type: 2}
   directionalLight: {fileID: 251887915}
-  darkLightIntensity: 0.2
+  darkLightIntensity: 0.3
   startColor: {r: 0.5411765, g: 0.70980394, b: 0.28627452, a: 1}
   targetColor: {r: 0.8627451, g: 0.9372549, b: 0.99215686, a: 1}
 --- !u!4 &697085512

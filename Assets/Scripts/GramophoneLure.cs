@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 // 설치된 축음기가 좀비를 유인하는 로직
 public class GramophoneLure : LivingEntity
@@ -6,12 +7,17 @@ public class GramophoneLure : LivingEntity
     public float lureRadius = 15f; // 유인 반경
     public float duration = 10f; // 유지 시간
     public GameObject musicEffect; // 음악 재생 시 파티클 효과 (선택사항)
+    public AudioSource audioSource;
+
 
     private void Start()
     {
         // 10초 뒤 파괴
         Destroy(gameObject, duration);
-        
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = 1f;
+
         // 음악 효과 재생 (있을 경우)
         if (musicEffect != null)
         {

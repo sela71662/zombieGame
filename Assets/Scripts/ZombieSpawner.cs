@@ -31,7 +31,7 @@ public class ZombieSpawner : MonoBehaviour {
     public Color startColor = new Color(138f / 255f, 181f / 255f, 73f / 255f, 1f);
     public Color targetColor = new Color(220f / 255f, 239f / 255f, 253f / 255f, 1f);
 
-    private List<Zombie> zombies = new List<Zombie>(); // 웨이브 진행을 체크하는 '큰 좀비' 리스트
+    private List<Zombie> zombies = new List<Zombie>(); // 웨이브 진행을 체크하는 좀비 리스트
     private int wave; // 현재 웨이브
     private bool isFinalSequenceStarted = false; // 최종 연출 시작 여부
 
@@ -63,7 +63,7 @@ public class ZombieSpawner : MonoBehaviour {
     private void Update() {
         if (GameManager.instance != null && GameManager.instance.isGameover || isFinalSequenceStarted) return;
 
-        // 리스트에 있는 '큰 좀비'들이 모두 죽으면 다음 웨이브
+        // 리스트에 있는 좀비들이 모두 죽으면 다음 웨이브
         if (zombies.Count <= 0 && wave < 7)
         {
             SpawnWave();
@@ -114,18 +114,21 @@ public class ZombieSpawner : MonoBehaviour {
         Zombie zombie = Instantiate(zombiePrefab, spawnPoint.position, spawnPoint.rotation);
         zombie.Setup(zombieData);
         
-        // 기본 좀비는 웨이브 트래킹에 포함(trackForWave = true)
+        // 기본 좀비는 항상 웨이브 트래킹에 포함
         RegisterZombie(zombie, true);
     }
 
-    // 외부(예: 분열 로직)에서 생성된 좀비를 등록
+    // 좀비 등록 로직
     public void RegisterZombie(Zombie zombie, bool trackForWave) {
-        if (trackForWave)
+        // 마지막 웨이브(7)라면 분열된 좀비(trackForWave=false인 녀석들)도 강제로 트래킹 목록에 넣음
+        bool shouldTrack = trackForWave || (wave == 7);
+
+        if (shouldTrack)
         {
             zombies.Add(zombie);
             zombie.onDeath += () => {
                 zombies.Remove(zombie);
-                // 마지막 7웨이브의 마지막 큰 좀비가 죽을 때 엔딩 시퀀스 시작
+                // 모든 좀비(7웨이브에서는 분열 좀비 포함)가 죽었을 때만 엔딩 시작
                 if (wave == 7 && zombies.Count == 0 && !isFinalSequenceStarted)
                 {
                     isFinalSequenceStarted = true;
@@ -134,14 +137,12 @@ public class ZombieSpawner : MonoBehaviour {
             };
         }
 
-        // 공통 사망 처리 (점수, 자동 파괴)
+        // 공통 처리
         zombie.onDeath += () => Destroy(zombie.gameObject, 10f);
         zombie.onDeath += () => GameManager.instance.AddScore(100);
     }
 
-    // 최종 킬 연출 코루틴
     private IEnumerator FinalKillSequence(Vector3 targetPosition) {
-        // 1. 슬로우 모션 시작 (0.15배속)
         Time.timeScale = 0.15f;
         Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
@@ -150,29 +151,23 @@ public class ZombieSpawner : MonoBehaviour {
 
         if (mainCam != null && player != null)
         {
-            // 시네머신 브레인 잠시 끄기
             MonoBehaviour brain = mainCam.GetComponent("CinemachineBrain") as MonoBehaviour;
             if (brain != null) brain.enabled = false;
 
             Vector3 startPos = mainCam.transform.position;
             Quaternion startRot = mainCam.transform.rotation;
             
-            // 플레이어의 등 뒤 상단 지점 (더 웅장한 어깨 너머 샷)
-            // 뒤로 4m, 위로 3.5m 높이
             Vector3 zoomPos = player.transform.position - player.transform.forward * 4.0f + Vector3.up * 3.5f;
-            // 플레이어와 좀비의 사이를 바라보게 설정
             Vector3 lookTarget = Vector3.Lerp(player.transform.position, targetPosition, 0.5f) + Vector3.up * 1.2f;
             Quaternion zoomRot = Quaternion.LookRotation(lookTarget - zoomPos);
 
             float elapsed = 0f;
-            float duration = 2.5f; // 요청하신 2.5초 줌인 속도
+            float duration = 2.5f;
 
             while (elapsed < duration)
             {
                 elapsed += Time.unscaledDeltaTime;
                 float t = elapsed / duration;
-                
-                // 영화 같은 부드러운 가감속
                 float smoothT = 1f - Mathf.Pow(1f - t, 3f); 
                 
                 mainCam.transform.position = Vector3.Lerp(startPos, zoomPos, smoothT);
@@ -181,10 +176,7 @@ public class ZombieSpawner : MonoBehaviour {
             }
         }
 
-        // 3. 줌인 완료 후 4초 동안 여운 유지 (슬로우 상태)
         yield return new WaitForSecondsRealtime(4.0f);
-        
-        // 4. 시간 복구 및 엔딩 씬 전환
         Time.timeScale = 1.0f;
         Time.fixedDeltaTime = 0.02f;
         SceneManager.LoadScene("Ending Scene");

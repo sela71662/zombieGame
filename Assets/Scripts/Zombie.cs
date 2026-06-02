@@ -72,8 +72,15 @@ public class Zombie : LivingEntity
         //네비메시 에이전트의 이동 속도 설정
         navMeshAgent.speed = zombieData.speed;
         originalSpeed = zombieData.speed; // 다시 갱신
+        
+        // 오브젝트 이름을 데이터 이름으로 변경 (zombie Pink 등)
+        gameObject.name = zombieData.name;
+
         //렌더러가 사용 중인 머테리얼의 컬러를 변경, 외형 색이 변함
-        zombieRenderer.material.color = zombieData.skinColor;
+        if (zombieRenderer != null)
+        {
+            zombieRenderer.material.SetColor("_BaseColor", zombieData.skinColor);
+        }
 
         // 분열 데이터 설정
         canSplit = zombieData.canSplit;
@@ -209,12 +216,20 @@ public class Zombie : LivingEntity
             // 크기를 0.5배로 축소
             miniZombie.transform.localScale = transform.localScale * 0.5f;
             
-            // 능력치 재설정 (이미 Setup이 호출된 상태이므로 수동 조정)
+            // 능력치 재설정
             miniZombie.health = startingHealth; 
             miniZombie.damage = this.damage; 
+
+            // 작은 좀비는 웨이브 트래킹에 포함시키지 않음 (trackForWave = false)
+            if (ZombieSpawner.instance != null)
+            {
+                ZombieSpawner.instance.RegisterZombie(miniZombie, false);
+            }
         }
 
-        // 본체는 보이지 않게 처리 후 즉시 파괴 (Die 효과 생략)
+        // 본체 사망 처리 (리스트에서 즉시 제거되어 웨이브 카운트 감소)
+        Die();
+        // 즉시 파괴하여 분열 효과 연출
         Destroy(gameObject);
     }
 
@@ -229,11 +244,14 @@ public class Zombie : LivingEntity
             zombieColliders[i].enabled = false;
         }
 
-        navMeshAgent.isStopped = true;
-        navMeshAgent.enabled = false;
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.isStopped = true;
+            navMeshAgent.enabled = false;
+        }
 
-        zombieAnimator.SetTrigger("Die");
-        zombieAudioPlayer.PlayOneShot(deathSound);
+        if (zombieAnimator != null) zombieAnimator.SetTrigger("Die");
+        if (zombieAudioPlayer != null) zombieAudioPlayer.PlayOneShot(deathSound);
     }
 
     private void OnTriggerStay(Collider other) {

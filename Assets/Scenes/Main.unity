@@ -1225,6 +1225,7 @@ MonoBehaviour:
   - {fileID: 137179025}
   - {fileID: 1142900684}
   - {fileID: 1317262167}
+  grassMaterial: {fileID: 2100000, guid: 32d4c6ca8b8b94c0fb75f01f06d0d8ed, type: 2}
 --- !u!4 &697085512
 Transform:
   m_ObjectHideFlags: 0

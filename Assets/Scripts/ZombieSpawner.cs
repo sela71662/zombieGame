@@ -8,8 +8,18 @@ public class ZombieSpawner : MonoBehaviour {
     public ZombieData[] zombieDatas; // 사용할 좀비 셋업 데이터들
     public Transform[] spawnPoints; // 좀비 AI를 소환할 위치들
 
+    public Material grassMaterial; // 바닥 잔디 머티리얼
+    private Color originColor; // 초기 색상
+
     private List<Zombie> zombies = new List<Zombie>(); // 생성된 좀비들을 담는 리스트
     private int wave; // 현재 웨이브
+
+    private void Start() {
+        // 시작 시 초기 색상 저장
+        if (grassMaterial != null) {
+            originColor = grassMaterial.color;
+        }
+    }
 
     private void Update() {
         // 게임 오버 상태일때는 생성하지 않음
@@ -19,7 +29,8 @@ public class ZombieSpawner : MonoBehaviour {
         }
 
         // 좀비를 모두 물리친 경우 다음 스폰 실행
-        if (zombies.Count <= 0)
+        // 5웨이브까지만 진행
+        if (zombies.Count <= 0 && wave < 5)
         {
             SpawnWave();
         }
@@ -37,6 +48,14 @@ public class ZombieSpawner : MonoBehaviour {
     // 현재 웨이브에 맞춰 좀비들을 생성
     private void SpawnWave() {
         wave++;
+
+        // 머티리얼 색상 변경 (1웨이브는 기본, 2~5웨이브에서 점점 지정된 색으로)
+        if (grassMaterial != null)
+        {
+            float t = (float)(wave - 1) / 4f; // 1웨이브: 0, 5웨이브: 1
+            Color targetColor = new Color(220f / 255f, 239f / 255f, 253f / 255f, 255f / 255f);
+            grassMaterial.color = Color.Lerp(originColor, targetColor, t);
+        }
 
         int spawnCount = Mathf.RoundToInt(wave * 1.5f);
 

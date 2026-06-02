@@ -25,6 +25,8 @@ public class ZombieSpawner : MonoBehaviour {
 
     [Header("Environment Settings")]
     public Material snowGrassMaterial; // 메인 게임용 머티리얼 (SnowGrass.mat 연결 필수)
+    public Light directionalLight; // 씬의 Directional Light
+    public float darkLightIntensity = 0.2f; // 어두운 웨이브일 때의 빛 밝기
     
     public Color startColor = new Color(138f / 255f, 181f / 255f, 73f / 255f, 1f);
     public Color targetColor = new Color(220f / 255f, 239f / 255f, 253f / 255f, 1f);
@@ -33,12 +35,28 @@ public class ZombieSpawner : MonoBehaviour {
     private int wave; // 현재 웨이브
     private bool isFinalSequenceStarted = false; // 최종 연출 시작 여부
 
+    private float originalLightIntensity; // 원래 빛 밝기
+    private List<int> darkWaves = new List<int>(); // 어두워질 웨이브 목록
+
     private void Start() {
         if (m_instance == null) m_instance = this;
 
         // 게임 시작 시 메인용 머티리얼을 초록색으로 리셋
         if (snowGrassMaterial != null) {
             snowGrassMaterial.SetColor("_BaseColor", startColor);
+        }
+
+        // 빛 초기 밝기 저장
+        if (directionalLight != null) {
+            originalLightIntensity = directionalLight.intensity;
+        }
+
+        // 2~7 웨이브 중 2개의 어두운 웨이브 랜덤 선택
+        while (darkWaves.Count < 2) {
+            int randomWave = Random.Range(2, 8); // 2~7
+            if (!darkWaves.Contains(randomWave)) {
+                darkWaves.Add(randomWave);
+            }
         }
     }
 
@@ -60,7 +78,7 @@ public class ZombieSpawner : MonoBehaviour {
     private void SpawnWave() {
         wave++;
 
-        // 웨이브에 따라 SnowGrass의 색상만 변경
+        // 머티리얼 색상 변경
         if (snowGrassMaterial != null)
         {
             float t = (float)(wave - 1) / 6f;
@@ -68,8 +86,26 @@ public class ZombieSpawner : MonoBehaviour {
             snowGrassMaterial.SetColor("_BaseColor", lerpedColor);
         }
 
+        // 어두운 웨이브 연출 처리
+        if (directionalLight != null) {
+            float targetIntensity = darkWaves.Contains(wave) ? darkLightIntensity : originalLightIntensity;
+            StartCoroutine(ChangeLightIntensity(targetIntensity, 2f));
+        }
+
         int spawnCount = Mathf.RoundToInt(wave * 1.5f);
         for (int i = 0; i < spawnCount; i++) CreateZombie();
+    }
+
+    // 빛 밝기를 서서히 바꾸는 코루틴
+    private IEnumerator ChangeLightIntensity(float targetIntensity, float duration) {
+        float startIntensity = directionalLight.intensity;
+        float elapsed = 0f;
+        while (elapsed < duration) {
+            elapsed += Time.deltaTime;
+            directionalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, elapsed / duration);
+            yield return null;
+        }
+        directionalLight.intensity = targetIntensity;
     }
 
     private void CreateZombie() {

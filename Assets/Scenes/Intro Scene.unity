@@ -1322,6 +1322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroSceneController
   gameSceneName: Main
+  grassMaterial: {fileID: 2100000, guid: 32d4c6ca8b8b94c0fb75f01f06d0d8ed, type: 2}
 --- !u!1 &905696812
 GameObject:
   m_ObjectHideFlags: 0
@@ -2939,8 +2940,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2036226974}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1692174, y: 0.18796793, z: -0.032894384, w: 0.96692896}
-  m_LocalPosition: {x: 1.1008142, y: 1.9782739, z: -3.7568326}
+  m_LocalRotation: {x: 0.34595022, y: 0.34820232, z: -0.14009242, w: 0.85991144}
+  m_LocalPosition: {x: -3.90192, y: 7.50615, z: -6.028918}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

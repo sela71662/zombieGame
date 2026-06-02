@@ -1,16 +1,29 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // ¾À ÀüÈ¯À» À§ÇØ ÇÊ¼ö!
+using UnityEngine.SceneManagement; // ì”¬ ì „í™˜ì„ ìœ„í•´ í•„ìˆ˜!
+
 public class IntroSceneController : MonoBehaviour
 {
-      // ÀÌµ¿ÇÒ °ÔÀÓ ¾ÀÀÇ ÀÌ¸§À» ÀÎ½ºÆåÅÍ¿¡¼­ ÀûÀ» ¼ö ÀÖ°Ô ¸¸µì´Ï´Ù.
-      public string gameSceneName = "Main";
+    // ì´ë™í•  ê²Œì„ ì”¬ì˜ ì´ë¦„ì„ ì¸ìŠ¤í™í„°ì—ì„œ ì ì„ ìˆ˜ ìˆê²Œ ë§Œë“­ë‹ˆë‹¤.
+    public string gameSceneName = "Main";
 
-    // ¹öÆ°À» Å¬¸¯ÇßÀ» ¶§ ½ÇÇàµÉ ÇÔ¼öÀÔ´Ï´Ù.
+    public Material grassMaterial; // ë°”ë‹¥ ì”ë”” ë¨¸í‹°ë¦¬ì–¼
+    
+    // ì¸íŠ¸ë¡œ ì”¬ ì „ìš© ê³ ì • ìƒ‰ìƒ (138, 181, 73)
+    public Color introColor = new Color(138f / 255f, 181f / 255f, 73f / 255f, 1f);
+
+    private void Start() {
+        // ì¸íŠ¸ë¡œ ì”¬ì´ ì‹œì‘ë  ë•Œ ë¨¸í‹°ë¦¬ì–¼ì„ í•­ìƒ ì´ˆë¡ìƒ‰ìœ¼ë¡œ ì´ˆê¸°í™” (URP ì†ì„± ì§ì ‘ ì œì–´)
+        if (grassMaterial != null) {
+            grassMaterial.SetColor("_BaseColor", introColor);
+        }
+    }
+
+    // ë²„íŠ¼ì„ í´ë¦­í–ˆì„ ë•Œ ì‹¤í–‰ë  í•¨ìˆ˜ì…ë‹ˆë‹¤.
     public void StartGame()
     {
         Debug.Log("click");
 
-        // ÁöÁ¤µÈ ¾ÀÀ» ·ÎµåÇÕ´Ï´Ù.
+        // ì§€ì •ëœ ì”¬ì„ ë¡œë“œí•©ë‹ˆë‹¤.
         SceneManager.LoadScene(gameSceneName);
     }
 }

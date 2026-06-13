@@ -272,7 +272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.020946741
+      value: -0.020946622
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.y
@@ -280,7 +280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.11250973
+      value: -0.11251068
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalRotation.w
@@ -805,7 +805,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.020946741
+      value: -0.020946622
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1571,6 +1571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IntroSceneController
   gameSceneName: Main
   grassMaterial: {fileID: 2100000, guid: 358cf31f4b114a343b5bae6ffb75093d, type: 2}
+  autoTransitionOnTimelineEnd: 0
 --- !u!1 &905696812
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,7 +3047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.020946622
+      value: -0.020946741
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3054,7 +3055,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.112508774
+      value: -0.11250973
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: 6bc76eedb6629574a83870562bc0c4ee, type: 3}
       propertyPath: m_LocalRotation.w

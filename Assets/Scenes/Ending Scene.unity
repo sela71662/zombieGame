@@ -1063,8 +1063,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7239c52852498f47a2c49d384a3e938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroSceneController
-  gameSceneName: Main
+  gameSceneName: Intro Scene
   grassMaterial: {fileID: 0}
+  autoTransitionOnTimelineEnd: 1
 --- !u!224 &804654764 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224345049331407482, guid: 63226789a2ac34fec8493b064c47bd44,
@@ -2662,7 +2663,7 @@ PlayableDirector:
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 688c661b903b3804ca61960e53ddbec5, type: 2}
   m_InitialState: 1
-  m_WrapMode: 1
+  m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
   m_SceneBindings:
@@ -2693,6 +2694,7 @@ PlayableDirector:
     - 069c64aa504f5184f81bcc24e3a805ec: {fileID: 2040117307}
     - 1fab2515d128f764ab3f366a9f0ba90d: {fileID: 973483190}
     - ea26635aebf2db642901c2a6404947b6: {fileID: 0}
+    - 4a37deef2396ba5439fa4442872088f5: {fileID: 1098432809}
     - 24e57c9c62190a544935765379883f15: {fileID: 1098432809}
     - a2ed5e7cba67d09478b6c08c8f4d3579: {fileID: 349122913}
 --- !u!4 &1717866930

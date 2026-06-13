@@ -74,6 +74,9 @@
   - 연출 종료 후 4초(실제 시간 기준) 뒤 자동으로 `Ending Scene`으로 장면이 전환됩니다.
 - **최종 웨이브 승리 조건:**
   - 1~6 웨이브는 큰 좀비만 처치하면 넘어가지만, 7웨이브는 분열된 모든 작은 좀비까지 완벽히 소탕해야 엔딩 연출이 시작되도록 로직을 정교화했습니다.
+- **Ending Scene 자동 시작 전환:**
+  - `Ending Scene` 로드 후 타임라인 영상(`EndingDirectorTimeline`) 재생이 종료되면, 사용자가 수동으로 버튼을 누르지 않아도 시작 화면(`Intro Scene`)으로 자동 전환되도록 `IntroSceneController`에 `autoTransitionOnTimelineEnd` 제어 옵션을 추가하고 씬 내 인스펙터 설정을 활성화했습니다.
+  - **무한 반복 루프 버그 수정:** 엔딩 씬의 `PlayableDirector` 컴포넌트의 `m_WrapMode`가 `1 (Loop)`로 잘못 지정되어 있어 영상이 무한 반복되고 종료 감지(`stopped`) 이벤트가 작동하지 않던 원인을 발견하여 `2 (None)`로 수정하였습니다.
 
 ## 7. 협업 및 개발 가이드
 - **UI 수정 시:** `UIManager`에 연결된 `SnowMan Cooldown Image` 등의 레퍼런스가 누락되지 않았는지 확인할 것.

@@ -26,7 +26,7 @@ public class ZombieSpawner : MonoBehaviour {
     [Header("Environment Settings")]
     public Material snowGrassMaterial; // 메인 게임용 머티리얼 (SnowGrass.mat 연결 필수)
     public Light directionalLight; // 씬의 Directional Light
-    public float darkLightIntensity = 0.2f; // 어두운 웨이브일 때의 빛 밝기
+    public float darkLightIntensity = 0.3f; // 어두운 웨이브일 때의 빛 밝기
     
     public Color startColor = new Color(138f / 255f, 181f / 255f, 73f / 255f, 1f);
     public Color targetColor = new Color(220f / 255f, 239f / 255f, 253f / 255f, 1f);
